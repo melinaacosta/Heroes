@@ -7,6 +7,9 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { HeroAddComponent } from '../hero-add/hero-add.component';
+import { MatDialog } from '@angular/material/dialog';
+import { HEROES_MOCK } from '../../mock/mock-heroes';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,15 +37,39 @@ export class DashboardComponent {
 
   public searchText: string = '';
 
-  constructor(private heroesService: BaseApiService) {}
+  constructor(
+    private heroesService: BaseApiService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.getAllHeroes();
   }
 
+  public addHero(): void {
+    const dialogRef = this.dialog.open(HeroAddComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((result: Heroe | undefined) => {
+      if (result) {
+        const nuevoId =
+          HEROES_MOCK.length > 0
+            ? Math.max(...HEROES_MOCK.map((h) => h.id)) + 1
+            : 1;
+
+        const nuevoHeroe = { ...result, id: nuevoId };
+
+        this.heroes.push(nuevoHeroe);
+        this.filteredHeroes = [...this.heroes];
+        this.totalHeroes = this.filteredHeroes.length;
+        this.updatedPage();
+      }
+    });
+  }
+
   public searchHeroes(): void {
     const search = this.searchText.toLocaleLowerCase().trim();
-    console.log(search)
     this.filteredHeroes = this.heroes.filter((heroe) =>
       heroe.nombre.toLocaleLowerCase().includes(search)
     );

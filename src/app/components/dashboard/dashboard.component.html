@@ -1,47 +1,55 @@
-<div class="title">
-  <h2>Lista de Heroes</h2>
+<div class="dashboard">
+  <div class="title">
+    <h2>Lista de Heroes</h2>
 
-  <mat-form-field class="search">
-    <input
-      matInput
-      placeholder="Buscar..."
-      value=""
-      type="search"
-      [(ngModel)]="searchText"
-      (ngModelChange)="searchHeroes()"
-    />
-  </mat-form-field>
-</div>
+    <mat-form-field class="search">
+      <input
+        matInput
+        placeholder="Buscar..."
+        value=""
+        type="search"
+        [(ngModel)]="searchText"
+        (ngModelChange)="searchHeroes()"
+      />
+    </mat-form-field>
+  </div>
 
-@if ( isLoading ) {
-<mat-spinner mode="indeterminate" color="primary"></mat-spinner>
-} @else {
-<div class="card">
-  @for (heroe of pagedHeroes; track $index) {
-  <mat-card class="card hero-card">
-    <mat-card-header>
-      <mat-card-title class="card hero-title">{{
-        heroe.nombre
-      }}</mat-card-title>
-    </mat-card-header>
-    <img
-      mat-card-image
-      [src]="heroe.imagen"
-      alt="{{ heroe.nombre }}"
-      class="card hero-image"
-    />
-    <mat-card-content>
-      <p class="card hero-description">{{ heroe.descripcion }}</p>
-    </mat-card-content>
-  </mat-card>
+  <div>
+    <button mat-raised-button color="primary" (click)="addHero()">
+      + Añadir Héroe
+    </button>
+  </div>
+
+  @if ( isLoading ) {
+  <mat-spinner mode="indeterminate" color="primary"></mat-spinner>
+  } @else {
+  <div class="card">
+    @for (heroe of pagedHeroes; track $index) {
+    <mat-card class="card hero-card">
+      <mat-card-header>
+        <mat-card-title class="card hero-title">{{
+          heroe.nombre
+        }}</mat-card-title>
+      </mat-card-header>
+      <img
+        mat-card-image
+        [src]="heroe.imagen"
+        alt="{{ heroe.nombre }}"
+        class="card hero-image"
+      />
+      <mat-card-content>
+        <p class="card hero-description">{{ heroe.descripcion }}</p>
+      </mat-card-content>
+    </mat-card>
+    }
+  </div>
+  <mat-paginator
+    [length]="totalHeroes"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+    aria-label="Select page"
+  >
+  </mat-paginator>
   }
 </div>
-<mat-paginator
-  [length]="totalHeroes"
-  [pageSize]="pageSize"
-  [pageSizeOptions]="[5, 10, 20]"
-  (page)="onPageChange($event)"
-  aria-label="Select page"
->
-</mat-paginator>
-}

@@ -1,0 +1,58 @@
+<mat-dialog-content>
+  <mat-card>
+    <mat-card-title class="modal-title">Nuevo Héroe</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="heroeForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="full-width">
+          <input
+            matInput
+            formControlName="nombre"
+            required
+            placeholder="Nombre"
+          />
+          @if ( heroeForm.controls['nombre'].hasError('required') ) {
+          <mat-error class="error">Nombre es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <input
+            matInput
+            formControlName="imagen"
+            required
+            placeholder="Imagen"
+          />
+          @if ( heroeForm.controls['imagen'].hasError('required') ) {
+          <mat-error class="error">Imagen es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <textarea
+            matInput
+            formControlName="descripcion"
+            required
+            placeholder="Descripción"
+          ></textarea>
+          @if ( heroeForm.controls['descripcion'].hasError('required') ) {
+          <mat-error class="error">Descripción es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="actions">
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="heroeForm.invalid"
+          >
+            Guardar
+          </button>
+          <button mat-button type="button" (click)="onCancel()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>

@@ -1,0 +1,34 @@
+<h2>Lista de Heroes</h2>
+
+@if ( isLoading ) {
+<mat-spinner mode="indeterminate" color="primary"></mat-spinner>
+} @else {
+<div class="card">
+  @for (heroe of pagedHeroes; track $index) {
+  <mat-card class="card hero-card">
+    <mat-card-header>
+      <mat-card-title class="card hero-title">{{
+        heroe.nombre
+      }}</mat-card-title>
+    </mat-card-header>
+    <img
+      mat-card-image
+      [src]="heroe.imagen"
+      alt="{{ heroe.nombre }}"
+      class="card hero-image"
+    />
+    <mat-card-content>
+      <p class="card hero-description">{{ heroe.descripcion }}</p>
+    </mat-card-content>
+  </mat-card>
+  }
+</div>
+<mat-paginator
+  [length]="totalHeroes"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 10, 20]"
+  (page)="onPageChange($event)"
+  aria-label="Select page"
+>
+</mat-paginator>
+}

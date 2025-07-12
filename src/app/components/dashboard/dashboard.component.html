@@ -25,7 +25,7 @@
   } @else {
   <div class="card">
     @for (heroe of pagedHeroes; track $index) {
-    <mat-card class="card hero-card">
+    <mat-card class="card hero-card" (click)="viewDetail(heroe.id)">
       <mat-card-header>
         <mat-card-title class="card hero-title">{{
           heroe.nombre
@@ -37,9 +37,6 @@
         alt="{{ heroe.nombre }}"
         class="card hero-image"
       />
-      <mat-card-content>
-        <p class="card hero-description">{{ heroe.descripcion }}</p>
-      </mat-card-content>
     </mat-card>
     }
   </div>

@@ -9,9 +9,12 @@ import { Heroe } from '../interfaces/hero.interface';
 export class BaseApiService {
   private heroes = HEROES_MOCK
 
-  constructor() { }
-
   public getAll(): Observable<Heroe[]>{
     return of(this.heroes)
+  }
+
+  public getById(id: number): Observable< Heroe | undefined>{
+    const hero = HEROES_MOCK.find(heroe => heroe.id === id);
+    return of(hero);
   }
 }

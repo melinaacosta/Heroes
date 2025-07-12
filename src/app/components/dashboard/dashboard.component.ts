@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { HeroAddComponent } from '../hero-add/hero-add.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HEROES_MOCK } from '../../mock/mock-heroes';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,7 @@ import { HEROES_MOCK } from '../../mock/mock-heroes';
     MatInputModule,
     MatFormFieldModule,
     FormsModule,
+    RouterModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.sass',
@@ -39,11 +41,16 @@ export class DashboardComponent {
 
   constructor(
     private heroesService: BaseApiService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.getAllHeroes();
+  }
+
+  public viewDetail(id: number): void {
+    this.router.navigate([`/heroes`, id]);
   }
 
   public addHero(): void {
@@ -54,8 +61,8 @@ export class DashboardComponent {
     dialogRef.afterClosed().subscribe((result: Heroe | undefined) => {
       if (result) {
         const nuevoId =
-          HEROES_MOCK.length > 0
-            ? Math.max(...HEROES_MOCK.map((h) => h.id)) + 1
+          this.heroes.length > 0
+            ? Math.max(...this.heroes.map((h) => h.id)) + 1
             : 1;
 
         const nuevoHeroe = { ...result, id: nuevoId };

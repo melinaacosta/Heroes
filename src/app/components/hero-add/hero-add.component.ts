@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef, MatDialogContent, MatDialogModule } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MatDialogContent, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,13 +29,15 @@ export class HeroAddComponent {
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<HeroAddComponent>
+    private dialogRef: MatDialogRef<HeroAddComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.heroeForm = this.fb.group({
-      nombre: ['', [Validators.required]],
-      imagen: ['', Validators.required],
-      descripcion: ['', Validators.required],
-    });
+    id: [data?.id],
+    nombre: [data?.nombre || '', Validators.required],
+    imagen: [data?.imagen || '', Validators.required],
+    descripcion: [data?.descripcion || '', Validators.required],
+  });
   }
 
   onSubmit() {

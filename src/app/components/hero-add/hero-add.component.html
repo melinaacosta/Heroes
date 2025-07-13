@@ -1,6 +1,8 @@
 <mat-dialog-content>
   <mat-card>
-    <mat-card-title class="modal-title">Nuevo Héroe</mat-card-title>
+    <mat-card-title class="modal-title">{{
+      data ? "Editar Héroe" : "Nuevo Héroe"
+    }}</mat-card-title>
     <mat-card-content>
       <form [formGroup]="heroeForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="fill" class="full-width">

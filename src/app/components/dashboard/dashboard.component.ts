@@ -8,8 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { HeroAddComponent } from '../hero-add/hero-add.component';
-import { MatDialog } from '@angular/material/dialog';
-import { HEROES_MOCK } from '../../mock/mock-heroes';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -23,6 +22,7 @@ import { Router, RouterModule } from '@angular/router';
     MatFormFieldModule,
     FormsModule,
     RouterModule,
+    MatDialogModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.sass',

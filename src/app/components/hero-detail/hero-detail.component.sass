@@ -1,14 +1,56 @@
+.card
+  margin: 2rem auto
+  padding: 1rem
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1)
+  border-radius: 12px
+  background-color: #fff
+  display: flex
+  flex-direction: column
+  align-items: center
+
 .hero-image
   border-radius: 50%
   height: 250px
   width: 250px
   object-fit: cover
+  box-shadow: 0 0 15px rgba(227, 140, 155, 0.5)
+  margin-bottom: 1.5rem
 
 .hero-title
   color: #e38c9b
-  font-weight: bold
-  font-size: 1.5rem
-  margin: 1rem
+  font-weight: 700
+  font-size: 2rem
+  margin-bottom: 1rem
+  text-align: center
 
 .hero-description
-  color: grey
+  color: #666666
+  font-size: 1.1rem
+  line-height: 1.5
+  text-align: center
+  margin-bottom: 2rem
+  padding: 0 1rem
+
+.actions
+  display: flex
+  gap: 1rem
+  justify-content: center
+  width: 100
+
+.actions button
+  min-width: 150px
+  font-weight: 600
+
+button
+  background-color: #f3a9b6f5
+  color: #c46575
+  height: 40px
+  border-radius: 20px
+  min-width: 150px
+  border: none
+  cursor: pointer
+  font-weight: bold
+  transition: background-color 0.3s ease
+
+  &:hover
+    background-color: #f18da4

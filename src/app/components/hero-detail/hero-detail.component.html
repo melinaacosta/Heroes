@@ -10,19 +10,18 @@
       mat-card-image
       [src]="heroe.imagen"
       alt="{{ heroe.nombre }}"
-      class="card hero-image"
+      class="hero-image"
     />
     <mat-card-content>
-      <p class="card hero-description">{{ heroe.descripcion }}</p>
+      <p class="hero-description">{{ heroe.descripcion }}</p>
     </mat-card-content>
   </mat-card>
   <div class="actions">
     <button mat-stroked-button color="primary" (click)="return()">
       ← Volver al listado
     </button>
-
     <button mat-flat-button color="accent" (click)="edit()">Editar</button>
-    <button mat-flat-button color="accent" (click)="delete(heroe)">
+    <button mat-flat-button color="warn" (click)="delete(heroe)">
       Eliminar
     </button>
   </div>

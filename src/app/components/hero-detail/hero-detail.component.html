@@ -1,29 +1,28 @@
-@if (heroe) {
+@if (heroe()) {
 <div class="card">
   <mat-card class="card hero-card">
     <mat-card-header>
-      <mat-card-title class="card hero-title">{{
-        heroe.nombre
-      }}</mat-card-title>
+      <mat-card-title class="card hero-title">
+        {{ heroe()?.nombre }}
+      </mat-card-title>
     </mat-card-header>
     <img
       mat-card-image
-      [src]="heroe.imagen"
-      alt="{{ heroe.nombre }}"
+      [src]="heroe()?.imagen"
+      alt="{{ heroe()?.nombre }}"
       class="hero-image"
     />
     <mat-card-content>
-      <p class="hero-description">{{ heroe.descripcion }}</p>
+      <p class="hero-description">{{ heroe()?.descripcion }}</p>
     </mat-card-content>
   </mat-card>
+
   <div class="actions">
     <button mat-stroked-button color="primary" (click)="return()">
       ← Volver al listado
     </button>
     <button mat-flat-button color="accent" (click)="edit()">Editar</button>
-    <button mat-flat-button color="warn" (click)="delete(heroe)">
-      Eliminar
-    </button>
+    <button mat-flat-button color="warn" (click)="delete()">Eliminar</button>
   </div>
 </div>
 }

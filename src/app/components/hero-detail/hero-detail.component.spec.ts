@@ -1,19 +1,20 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeroDetailComponent } from './hero-detail.component';
 import { BaseApiService } from '../../services/base-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { Heroe } from '../../interfaces/hero.interface';
 
 describe('HeroDetailComponent', () => {
   let component: HeroDetailComponent;
   let fixture: ComponentFixture<HeroDetailComponent>;
-  let mockHeroService: any;
-  let mockRouter: any;
+  let mockHeroService: jasmine.SpyObj<BaseApiService>;
+  let mockRouter: jasmine.SpyObj<Router>;
   let mockActivatedRoute: any;
   let mockDialog: any;
 
-  const heroMock = {
+  const heroMock: Heroe = {
     id: 1,
     nombre: 'Spiderman',
     imagen: 'url',
@@ -21,26 +22,32 @@ describe('HeroDetailComponent', () => {
   };
 
   beforeEach(async () => {
-    mockHeroService = {
-      getById: jasmine.createSpy('getById').and.returnValue(of(heroMock)),
-      update: jasmine.createSpy('update').and.returnValue(of(heroMock)),
-      delete: jasmine.createSpy('delete').and.returnValue(of(heroMock)),
-    };
+    mockHeroService = jasmine.createSpyObj('BaseApiService', [
+      'getById',
+      'update',
+      'delete',
+    ]);
+    mockHeroService.getById.and.returnValue(of(heroMock));
+    mockHeroService.update.and.returnValue(of(heroMock));
+    mockHeroService.delete.and.returnValue(of(heroMock));
 
-    mockRouter = {
-      navigate: jasmine.createSpy('navigate'),
-    };
+    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
 
     mockActivatedRoute = {
       snapshot: {
         paramMap: {
-          get: jasmine.createSpy('get').and.returnValue('1'),
+          get: jasmine.createSpy().and.returnValue('1'),
+        },
+        queryParams: {
+          search: 'bat',
+          page: '2',
+          size: '10',
         },
       },
     };
 
     mockDialog = {
-      open: jasmine.createSpy('open').and.returnValue({
+      open: jasmine.createSpy().and.returnValue({
         afterClosed: () => of(heroMock),
       }),
     };
@@ -64,32 +71,81 @@ describe('HeroDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fetch hero on init', () => {
+  it('should load hero on init', () => {
     expect(mockHeroService.getById).toHaveBeenCalledWith(1);
-    expect(component.heroe).toEqual(heroMock);
+    expect(component.heroe()).toEqual(heroMock);
   });
 
-  it('return() should navigate to root', () => {
+  it('return() should navigate to root with queryParams', () => {
     component.return();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(
+      ['/'],
+      { queryParams: mockActivatedRoute.snapshot.queryParams }
+    );
   });
 
-  it('edit() should open dialog and navigate on success', () => {
+  it('edit() should open dialog and update hero with queryParams', () => {
+    component.heroe.set(heroMock);
+
     component.edit();
+
     expect(mockDialog.open).toHaveBeenCalled();
     expect(mockHeroService.update).toHaveBeenCalledWith(heroMock);
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(
+      ['/'],
+      { queryParams: mockActivatedRoute.snapshot.queryParams }
+    );
   });
 
-  it('delete() should open dialog, call delete service and navigate', () => {
+  it('delete() should open dialog and delete hero with queryParams', () => {
     mockDialog.open.and.returnValue({
       afterClosed: () => of(true),
     });
-    component.heroe = heroMock;
-    component.delete(heroMock);
+
+    component.heroe.set(heroMock);
+
+    component.delete();
 
     expect(mockDialog.open).toHaveBeenCalled();
     expect(mockHeroService.delete).toHaveBeenCalledWith(heroMock.id);
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(
+      ['/'],
+      { queryParams: mockActivatedRoute.snapshot.queryParams }
+    );
+  });
+
+  it('delete() should not delete if dialog is cancelled', () => {
+    mockDialog.open.and.returnValue({
+      afterClosed: () => of(false),
+    });
+
+    component.heroe.set(heroMock);
+
+    component.delete();
+
+    expect(mockHeroService.delete).not.toHaveBeenCalled();
+    expect(mockRouter.navigate).not.toHaveBeenCalled();
+  });
+
+  it('edit() should do nothing if dialog is cancelled', () => {
+    mockDialog.open.and.returnValue({
+      afterClosed: () => of(undefined),
+    });
+
+    component.heroe.set(heroMock);
+
+    component.edit();
+
+    expect(mockHeroService.update).not.toHaveBeenCalled();
+    expect(mockRouter.navigate).not.toHaveBeenCalled();
+  });
+
+  it('delete() should do nothing if heroe is undefined', () => {
+    component.heroe.set(undefined);
+
+    component.delete();
+
+    expect(mockDialog.open).not.toHaveBeenCalled();
+    expect(mockHeroService.delete).not.toHaveBeenCalled();
   });
 });
